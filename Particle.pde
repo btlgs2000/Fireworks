@@ -7,14 +7,17 @@ class Particle {
   PImage particleImage;
   int liveDuration;
   int age = 0;
+  // oggetto pGraphics sul quale viene disegnata la particella
+  PGraphics pGraphics;
   
-  Particle(PVector initialPosition, PVector initialVelocity, PVector initialAcceleration, color tint, PImage particleImage, int liveDuration){
+  Particle(PGraphics pGraphics, PVector initialPosition, PVector initialVelocity, PVector initialAcceleration, color tint, PImage particleImage, int liveDuration){
     this.position = initialPosition;
     this.velocity = initialVelocity;
     this.acceleration = initialAcceleration;
     this.tint = tint;
     this.particleImage = particleImage;
     this.liveDuration = liveDuration;
+    this.pGraphics = pGraphics;
   }
   
   // aggiorna le caratteristiche della particella
@@ -26,10 +29,10 @@ class Particle {
   
   // disegna la particella
   void draw(){
-    imageMode(CENTER);
+    pGraphics.imageMode(CENTER);
     alpha = int(255 - 255.*float(age)/liveDuration);
-    tint(red(tint), green(tint), blue(tint), alpha);
-    image(particleImage, position.x, position.y);
+    pGraphics.tint(red(tint), green(tint), blue(tint), alpha);
+    pGraphics.image(particleImage, position.x, position.y);
   }
   
   int getAge() {
@@ -38,5 +41,14 @@ class Particle {
   
   int getLiveDuration() {
     return this.liveDuration;
+  }
+  
+  PVector getPosition() {
+    return position;
+  }
+  
+  boolean isOnScreen() {
+    return position.x >= -particleRadius && position.x <= pGraphics.width+particleRadius &&
+      position.y >= -particleRadius && position.y <= pGraphics.height+particleRadius;
   }
 }

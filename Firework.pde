@@ -1,5 +1,5 @@
 import java.util.Iterator;
-
+ 
 class Firework{
   PVector position;
   int particlesNumber; 
@@ -10,8 +10,10 @@ class Firework{
   float sigmaLiveDuration;
   ArrayList<Particle> particles;
   PImage particleImage;
+  // oggetto PGraphics su cui viene disegnato il fuoco d'artificio
+  PGraphics pGraphics;
   
-  Firework(PImage particleImage, PVector position, int particlesNumber, color color_, float meanSpeed, float sigmaSpeed, int meanLive, float sigmaLiveDuration) {
+  Firework(PImage particleImage, PGraphics pGraphics, PVector position, int particlesNumber, color color_, float meanSpeed, float sigmaSpeed, int meanLive, float sigmaLiveDuration) {
     this.position = position;
     this.particlesNumber = particlesNumber;
     this.color_ = color_;
@@ -20,6 +22,11 @@ class Firework{
     this.meanLive  = meanLive;
     this.sigmaLiveDuration = sigmaLiveDuration;
     this.particleImage = particleImage;
+    this.pGraphics = pGraphics;
+    
+    this.pGraphics.beginDraw();
+    this.pGraphics.blendMode(blendMode);
+    this.pGraphics.endDraw();
     particles = createParticles();
   }
   
@@ -32,7 +39,8 @@ class Firework{
     while(particleIterator.hasNext()) {
       Particle particle = particleIterator.next();
       // controlla l'età della particella. Se è troppo vecchia eliminala, altrimenti aggiornala
-      if(particle.age > particle.liveDuration) {
+      // eliminala anche se è fuori dallo schermo
+      if(particle.age > particle.liveDuration || !particle.isOnScreen()) {
         // la particella è vecchia
         particleIterator.remove();
       } else {
@@ -42,10 +50,14 @@ class Firework{
     }
   }
   
-  void draw() {
+  PImage draw() {
+    pGraphics.beginDraw();
+    pGraphics.clear();
     for(Particle particle: particles) {     
       particle.draw();
     }
+    pGraphics.endDraw();
+    return pGraphics;
   }
   
   // crea l'array iniziale di particelle
@@ -63,7 +75,7 @@ class Firework{
     PVector initialPosition = this.position.copy();
     PVector speed = getParticleSpeed();
     int lifeDuration = getLifeDuration();
-    particle = new Particle(initialPosition, speed, gravity, color_, particleImage, lifeDuration);
+    particle = new Particle(pGraphics, initialPosition, speed, gravity, color_, particleImage, lifeDuration);
     return particle;
   }
   

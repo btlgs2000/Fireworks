@@ -4,19 +4,24 @@ PImage particleImage;
 color[] colors = {color(255, 30, 30),
                   color(30, 255, 30),
                   color(30, 30, 255)};
-int particleRadius = 15;
-int particleNumber = 500;
-float meanSpeed = 1.8;
-float sigmaSpeed = 0.1; 
-int meanLive = 400;
+int particleRadius = 5;
+int particleNumber = 300;
+float meanSpeed = 2.8;
+float sigmaSpeed = 2.6; 
+int meanLive = 300;
 float sigmaLiveDuration = 100;
+int blendMode = ADD;
+
+// i fuochi d'artificio prima vengono disegnati su questo schermo ausiliario
+PGraphics offScreen;
 
 void setup(){
   fullScreen(P2D);
-  blendMode(ADD);
+  blendMode(blendMode);
   particleImage = createParticleShape(particleRadius);
   gravity = new PVector(0, 0.01);
   fireworks = new ArrayList<Firework>();
+  offScreen = createGraphics(width, height, P2D);
 }
 
 void draw(){
@@ -31,13 +36,13 @@ void draw(){
       } else {
         // il firework è ancora valido
         firework.update();
-        firework.draw();
+        image(firework.draw(), 0, 0);
       }
     }
 }
 
 void mousePressed() {
-  fireworks.add(new Firework(particleImage, new PVector(mouseX, mouseY), particleNumber, randomColor(), meanSpeed, sigmaSpeed, meanLive, sigmaLiveDuration));
+  fireworks.add(new Firework(particleImage, offScreen, new PVector(mouseX, mouseY), particleNumber, randomColor(), meanSpeed, sigmaSpeed, meanLive, sigmaLiveDuration));
 }
 
 //color randomColor() {
