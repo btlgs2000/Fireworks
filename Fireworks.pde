@@ -1,4 +1,4 @@
-PVector gravity;
+PVector gravity = new PVector(0, 0.01);
 ArrayList<Firework> fireworks;
 PImage particleImage;
 color[] colors = {color(255, 30, 30),
@@ -17,7 +17,6 @@ void setup(){
   fullScreen(P2D);
   blendMode(blendMode);
   particleImage = createParticleShape(particleRadius);
-  gravity = new PVector(0, 0.01);
   fireworks = new ArrayList<Firework>();
 }
 
