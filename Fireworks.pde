@@ -11,11 +11,13 @@ float sigmaSpeed = 0.6;
 int meanLive = 300;
 float sigmaLiveDuration = 100;
 int blendMode = ADD;
+PGraphicsPool pGraphicsPool;
 
 
 void setup(){
   fullScreen(P2D);
   blendMode(blendMode);
+  pGraphicsPool = new PGraphicsPool(5);
   particleImage = createParticleShape(particleRadius);
   fireworks = new ArrayList<Firework>();
 }
@@ -29,6 +31,7 @@ void draw(){
       if(firework.getAliveParticlesNumber() == 0) {
         // il firework è esaurito
         fireworkIterator.remove();
+        pGraphicsPool.free(firework.getPGraphics());       
       } else {
         // il firework è ancora valido
         firework.update();
@@ -38,7 +41,7 @@ void draw(){
 }
 
 void mousePressed() {
-  fireworks.add(new Firework(particleImage, createGraphics(width, height, P2D), new PVector(mouseX, mouseY), particleNumber, randomColor(), meanSpeed, sigmaSpeed, meanLive, sigmaLiveDuration));
+  fireworks.add(new Firework(particleImage, pGraphicsPool.get(), new PVector(mouseX, mouseY), particleNumber, randomColor(), meanSpeed, sigmaSpeed, meanLive, sigmaLiveDuration));
 }
 
 //color randomColor() {

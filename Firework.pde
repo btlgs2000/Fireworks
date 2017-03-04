@@ -88,4 +88,8 @@ class Firework{
   int getLifeDuration() {
     return int(meanLive + randomGaussian()*sigmaLiveDuration);
   }
+  
+  PGraphics getPGraphics() {
+    return pGraphics;
+  }
 }
