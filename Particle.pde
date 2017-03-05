@@ -26,9 +26,10 @@ class Particle {
   
   // disegna la particella
   void draw(){
+    if(random(1.)< shininess) return;
     imageMode(CENTER);
     alpha = int(255 - 255.*float(age)/liveDuration);
-    tint(red(tint), green(tint), blue(tint), alpha);
+    tint(tint, alpha);
     image(particleImage, position.x, position.y);
   }
   

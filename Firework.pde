@@ -10,8 +10,11 @@ class Firework{
   float sigmaLiveDuration;
   ArrayList<Particle> particles;
   PImage particleImage;
+  boolean randomColor;
   
-  Firework(PImage particleImage, PVector position, int particlesNumber, color color_, float meanSpeed, float sigmaSpeed, int meanLive, float sigmaLiveDuration) {
+  Firework(){}
+  
+  Firework(PImage particleImage, PVector position, int particlesNumber, color color_, float meanSpeed, float sigmaSpeed, int meanLive, float sigmaLiveDuration, boolean randomColor) {
     this.position = position;
     this.particlesNumber = particlesNumber;
     this.color_ = color_;
@@ -20,6 +23,8 @@ class Firework{
     this.meanLive  = meanLive;
     this.sigmaLiveDuration = sigmaLiveDuration;
     this.particleImage = particleImage;
+    this.randomColor = randomColor;
+    
     particles = createParticles();
   }
   
@@ -59,10 +64,16 @@ class Firework{
   
   // crea una singola particella
   Particle createParticle() {
+    color color_;
     Particle particle;
     PVector initialPosition = this.position.copy();
     PVector speed = getParticleSpeed();
     int lifeDuration = getLifeDuration();
+    if (randomColor){
+      color_ = randomColor();
+    } else {
+      color_ = this.color_;
+    }
     particle = new Particle(initialPosition, speed, gravity, color_, particleImage, lifeDuration);
     return particle;
   }
